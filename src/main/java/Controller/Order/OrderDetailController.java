@@ -2,6 +2,7 @@ package Controller.Order;
 
 import DBConnection.DBConnection;
 import Model.OrderDetail;
+import Util.CrudUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,16 +20,16 @@ public class OrderDetailController {
         }
         return true;
     }
-    public boolean addOrderDetail(OrderDetail orderDetail) {
-     String sql = "INSERT INTO orderdetail VALUES(?,?,?,?)";
 
+    public boolean addOrderDetail(OrderDetail orderDetail) {
+        String sql = "INSERT INTO orderdetail VALUES(?,?,?,?)";
         try {
-            PreparedStatement stm = DBConnection.getInstance().getConnection().prepareStatement(sql);
-            stm.setString(1,orderDetail.getOrderId());
-            stm.setString(2,orderDetail.getItemCode());
-            stm.setObject(3,orderDetail.getQty());
-            stm.setObject(4,orderDetail.getUnitPrice());
-            return stm.executeUpdate()>0;
+            return CrudUtil.execute(
+                    orderDetail.getItemCode(),
+                    orderDetail.getQty(),
+                    orderDetail.getOrderId(),
+                    orderDetail.getUnitPrice()
+            );
 
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
