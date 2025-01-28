@@ -1,5 +1,5 @@
 
-# Thogakade Management System
+<h1 align="center">Thogakade Management System </h1>
 
 Thogakade Management System is a comprehensive application designed to manage retail operations efficiently. The system combines a robust backend developed using Java with an intuitive user interface built using Scene Builder.
 
@@ -41,8 +41,9 @@ Thogakade Management System is a comprehensive application designed to manage re
 - **Database Scripts:** Located in the `db_scripts` folder for setting up the database schema.
 
 ## Screenshots
+<div align="center">
+   
 ![Capture](https://github.com/user-attachments/assets/8144fdc6-3603-45c1-a81f-892606d9bbef)
-
 
 ![5Capture](https://github.com/user-attachments/assets/2d0b61ea-44be-4869-95f9-1c19436ace15)
 
@@ -50,3 +51,4 @@ Thogakade Management System is a comprehensive application designed to manage re
 
 ![2Capture](https://github.com/user-attachments/assets/2310a5a9-2868-4e98-b4a6-87fdd4a0e0fc)
 
+</div>
