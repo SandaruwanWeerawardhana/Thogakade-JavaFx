@@ -5,7 +5,7 @@ import Model.Customer;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface CustomerServise {
+public interface CustomerServise1 {
     List<Customer> getAll() throws SQLException, ClassNotFoundException;
 
     boolean saveCustomer(Customer customer) throws SQLException, ClassNotFoundException;

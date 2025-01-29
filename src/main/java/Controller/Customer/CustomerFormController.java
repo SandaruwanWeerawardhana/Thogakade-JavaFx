@@ -2,6 +2,9 @@ package Controller.Customer;
 
 import DBConnection.DBConnection;
 import Model.Customer;
+import Service.Custom.CustomerService;
+import Service.ServiceFactory;
+import Util.ServiceType;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.ObservableList;
@@ -54,9 +57,11 @@ public class CustomerFormController implements Initializable {
     @FXML
     private JFXButton update;
 
+
+
     @FXML
     void addAction(ActionEvent event) {
-        try {
+        CustomerService CustomerService = ServiceFactory.getInstance().getServiceType(ServiceType.CUSTOMER);
 
             Customer customer = new Customer(
                     txtID.getText(),
@@ -64,7 +69,7 @@ public class CustomerFormController implements Initializable {
                     txtAddress.getText(),
                     Double.parseDouble(txtSalary.getText())
             );
-            boolean isAdded = CustomerController.getInstance().saveCustomer(customer);
+            boolean isAdded = CustomerService.saveCustomer(customer);
 
             if (isAdded) {
                 new Alert(Alert.AlertType.CONFIRMATION, "customer added").show();
@@ -77,14 +82,10 @@ public class CustomerFormController implements Initializable {
                     txtAddress.getText(),
                     Double.parseDouble(txtSalary.getText())
             ));
-
             txtID.clear();
             txtName.clear();
             txtAddress.clear();
             txtSalary.clear();
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @FXML
@@ -215,7 +216,7 @@ public class CustomerFormController implements Initializable {
         txtID.setText(customer.getId());
         txtName.setText(customer.getName());
         txtAddress.setText(customer.getAddress());
-        txtSalary.setText(customer.getSalary()+"");
+        txtSalary.setText(customer.getSalary() + "");
     }
 
 
