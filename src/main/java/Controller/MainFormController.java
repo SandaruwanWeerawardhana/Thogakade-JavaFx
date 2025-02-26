@@ -18,9 +18,6 @@ public class MainFormController implements Initializable {
     public Button btnCustomer;
     public AnchorPane lodePage;
 
-    public void btnItemAction(MouseEvent mouseEvent) {
-    }
-
     public void btnCustomerAction(ActionEvent actionEvent)  {
         try {
             LodeCustomerPage();
@@ -58,4 +55,5 @@ public class MainFormController implements Initializable {
         Object load = FXMLLoader.load(getClass().getResource("/View/Order.fxml"));
         lodePage.getChildren().add((Node) load);
     }
+
 }

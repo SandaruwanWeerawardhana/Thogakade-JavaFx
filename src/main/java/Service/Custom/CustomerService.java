@@ -4,13 +4,14 @@ import Model.Customer;
 import Service.SuperService;
 import javafx.collections.ObservableList;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface CustomerService extends SuperService {
-    List<Customer> getAll();
-    boolean saveCustomer(Customer customer);
-    boolean updateCustomer(Customer customer);
-    boolean deleteCustomer(String customerId);
-    Customer searchCustomer(String customerId);
-    ObservableList<String> getCustomerId();
+    List<Customer> getAll() throws SQLException, ClassNotFoundException;
+    boolean saveCustomer(Customer customer) throws SQLException, ClassNotFoundException;
+    boolean updateCustomer(Customer customer) throws SQLException, ClassNotFoundException;
+    boolean deleteCustomer(String customerId) throws SQLException, ClassNotFoundException;
+    Customer searchCustomer(String customerId) throws SQLException, ClassNotFoundException;
+    ObservableList<String> getCustomerId() throws SQLException, ClassNotFoundException;
 }

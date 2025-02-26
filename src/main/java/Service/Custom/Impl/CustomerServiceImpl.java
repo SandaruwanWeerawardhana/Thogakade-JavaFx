@@ -2,8 +2,13 @@ package Service.Custom.Impl;
 
 import Model.Customer;
 import Service.Custom.CustomerService;
+import Util.DaoType;
 import javafx.collections.ObservableList;
+import repository.DaoFactory;
+import repository.SuperDao;
+import repository.custom.CustomerDao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class CustomerServiceImpl implements CustomerService {
@@ -12,37 +17,39 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerServiceImpl(){}
 
     public static CustomerServiceImpl getInstance(){
-        return instance==null? instance=new CustomerServiceImpl():instance;
+        return instance==null? instance = new CustomerServiceImpl():instance;
+    }
+
+    CustomerDao customerDao = DaoFactory.getInstance().getDaoType(DaoType.CUSTOMER);
+
+    @Override
+    public List<Customer> getAll() throws SQLException, ClassNotFoundException {
+        List<Customer> customerList = customerDao.getAll();
+        return customerList;
     }
 
     @Override
-    public List<Customer> getAll() {
-        return List.of();
+    public boolean saveCustomer(Customer customer) throws SQLException, ClassNotFoundException {
+        return  customerDao.save(customer);
     }
 
     @Override
-    public boolean saveCustomer(Customer customer) {
-        System.out.println("dsafasdf"+customer);
-        return false;
+    public boolean updateCustomer(Customer customer) throws SQLException, ClassNotFoundException {
+        return customerDao.update(customer);
     }
 
     @Override
-    public boolean updateCustomer(Customer customer) {
-        return false;
+    public boolean deleteCustomer(String customerId) throws SQLException, ClassNotFoundException {
+        return customerDao.delete(customerId);
     }
 
     @Override
-    public boolean deleteCustomer(String customerId) {
-        return false;
+    public Customer searchCustomer(String customerId) throws SQLException, ClassNotFoundException {
+        return customerDao.search(customerId);
     }
 
     @Override
-    public Customer searchCustomer(String customerId) {
-        return null;
-    }
-
-    @Override
-    public ObservableList<String> getCustomerId() {
-        return null;
+    public ObservableList<String> getCustomerId() throws SQLException, ClassNotFoundException {
+        return customerDao.getId();
     }
 }

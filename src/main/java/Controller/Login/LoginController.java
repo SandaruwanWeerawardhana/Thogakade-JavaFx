@@ -4,15 +4,18 @@ package Controller.Login;
 import DBConnection.DBConnection;
 import Model.Login;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginController {
 
-    public static Login check(String name, String password) throws SQLException, ClassNotFoundException {
+    public static Login check(String name) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getInstance().getConnection();
-        PreparedStatement stm = connection.prepareStatement("Select * from users where username=? AND password=?");
+        PreparedStatement stm = connection.prepareStatement("Select UserName,password from users where UserName=?");
         stm.setString(1, name);
-        stm.setString(2, password);
+//        stm.setString(2, password);
         ResultSet resultSet = stm.executeQuery();
         if (resultSet.next()) {
             return new Login(
@@ -22,8 +25,6 @@ public class LoginController {
             );
         }
         return null;
-
-
     }
 
 }

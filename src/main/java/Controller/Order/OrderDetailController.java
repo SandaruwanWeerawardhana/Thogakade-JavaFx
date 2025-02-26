@@ -1,11 +1,8 @@
 package Controller.Order;
 
-import DBConnection.DBConnection;
 import Model.OrderDetail;
 import Util.CrudUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -25,6 +22,7 @@ public class OrderDetailController {
         String sql = "INSERT INTO orderdetail VALUES(?,?,?,?)";
         try {
             return CrudUtil.execute(
+                    sql,
                     orderDetail.getItemCode(),
                     orderDetail.getQty(),
                     orderDetail.getOrderId(),

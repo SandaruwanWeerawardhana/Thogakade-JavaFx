@@ -14,13 +14,14 @@ public class OrderCart {
     private Integer qty;
     private Double unitPrice;
     private Double total;
-    private String orderId;
+//    private String orderId;
 
-    public OrderCart(String itemcode, String desc, int qty, double unitPrice, Double total) {
-        this.itemcode=itemcode;
-        this.desc=desc;
-        this.qty=qty;
-        this.unitPrice=unitPrice;
-        this.total=total;
-    }
+//    public OrderCart(String itemcode, String desc, int qty, double unitPrice, Double total) {
+//        this.itemcode=itemcode;
+//        this.desc=desc;
+//        this.qty=qty;
+//        this.unitPrice=unitPrice;
+//        this.total=total;
+//    }
+
 }

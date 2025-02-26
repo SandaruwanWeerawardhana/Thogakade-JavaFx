@@ -1,9 +1,11 @@
 package Controller.Order;
 
-import Controller.Customer.CustomerController;
-import Controller.Item.ItemController;
 import DBConnection.DBConnection;
 import Model.*;
+import Service.Custom.CustomerService;
+import Service.Custom.ItemService;
+import Service.ServiceFactory;
+import Util.ServiceType;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.animation.Animation;
@@ -58,17 +60,20 @@ public class OrderFormController implements Initializable {
     public void txtCode(ActionEvent actionEvent) {
     }
 
-    public void addAction(ActionEvent actionEvent) {
-    }
+//    public void addAction(ActionEvent actionEvent) {
+//    }
+//
+//    public void updateaction(ActionEvent actionEvent) {
+//    }
+//
+//    public void searchAction(ActionEvent actionEvent) {
+//    }
+//
+//    public void delateaction(ActionEvent actionEvent) {
+//    }
 
-    public void updateaction(ActionEvent actionEvent) {
-    }
-
-    public void searchAction(ActionEvent actionEvent) {
-    }
-
-    public void delateaction(ActionEvent actionEvent) {
-    }
+    CustomerService customerService = ServiceFactory.getInstance().getServiceType(ServiceType.CUSTOMER);
+    ItemService itemService = ServiceFactory.getInstance().getServiceType(ServiceType.ITEM);
 
     private void loadDateAndTime() {
         Date date = new Date();
@@ -89,22 +94,18 @@ public class OrderFormController implements Initializable {
 
     private void loadCustomerId() {
         try {
-            comboBox.setItems(CustomerController.getInstance().getCustomerID());
+            comboBox.setItems(customerService.getCustomerId());
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     private void loadItemId() {
         try {
-            comboBoxItem.setItems(ItemController.getInstance().getItemID());
+            comboBoxItem.setItems(itemService.getId());
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     @Override
@@ -133,11 +134,10 @@ public class OrderFormController implements Initializable {
 
     private void loadCustomerDatatxt(String id) {
         try {
-            Customer customer = CustomerController.getInstance().searchCustomer(id);
+            Customer customer = customerService.searchCustomer(id);
             txtName.setText(customer.getName());
             txtAddress.setText(customer.getAddress());
             txtSalary.setText(customer.getSalary().toString());
-
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -146,7 +146,7 @@ public class OrderFormController implements Initializable {
 
     private void loadItemDatatxt(String id) {
         try {
-            Item item = ItemController.getInstance().searchItem(id);
+            Item item = itemService.search(id);
             txtDescription.setText(item.getDescription());
             txtUnitPrice.setText(item.getUnitPrice().toString());
             txtQtyOnHand.setText(item.getQtyOnHand().toString());
@@ -227,7 +227,7 @@ public class OrderFormController implements Initializable {
         );
 
         try {
-            boolean isAddedOrder = new OrderController().placeOrder(order);
+            boolean isAddedOrder = OrderController.placeOrder(order);
             if (isAddedOrder) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Order Added").show();
             } else {
@@ -243,12 +243,12 @@ public class OrderFormController implements Initializable {
     private void generateOrderID() {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
-            PreparedStatement stm = connection.prepareStatement("SELECT id FROM orders ORDER BY id DESC LIMIT 1");
+            PreparedStatement stm = connection.prepareStatement("SELECT OrderID FROM orders ORDER BY OrderID DESC LIMIT 1");
             ResultSet rst = stm.executeQuery();
 
             String newOrderId;
             if (rst.next()) {
-                String lastId = rst.getString("id");
+                String lastId = rst.getString("OrderID");
                 int lastNumber = Integer.parseInt(lastId.substring(1));
                 int newNumber = lastNumber + 1;
                 newOrderId = String.format("D%03d", newNumber);
@@ -263,4 +263,6 @@ public class OrderFormController implements Initializable {
     }
 
 
+    public void delateaction(ActionEvent actionEvent) {
+    }
 }

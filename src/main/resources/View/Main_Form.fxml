@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="btnItem" onDragDetected="#btnItemAction" prefHeight="510.0" prefWidth="858.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainFormController">
+<AnchorPane fx:id="btnItem" prefHeight="510.0" prefWidth="858.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainFormController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#084805" height="510.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="208.0" />
       <Button fx:id="btnCustomer" layoutX="31.0" layoutY="176.0" mnemonicParsing="false" onAction="#btnCustomerAction" prefHeight="38.0" prefWidth="146.0" text="Customer">

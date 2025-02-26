@@ -7,15 +7,19 @@ import Util.ServiceType;
 public class ServiceFactory {
     private static ServiceFactory instance;
 
-    private ServiceFactory(){}
+    private ServiceFactory() {
+    }
 
     public static ServiceFactory getInstance() {
-        return instance==null ? instance=new ServiceFactory():instance;
+        return instance == null ? instance = new ServiceFactory() : instance;
     }
-    public <T extends SuperService>T getServiceType(ServiceType type){
-        switch (type){
-            case CUSTOMER:return (T) CustomerServiceImpl.getInstance();
-            case ITEM:return (T) new ItemServiceImpl();
+
+    public <T extends SuperService> T getServiceType(ServiceType type) {
+        switch (type) {
+            case CUSTOMER:
+                return (T) CustomerServiceImpl.getInstance();
+            case ITEM:
+                return (T) ItemServiceImpl.getInstance();
         }
         return null;
     }

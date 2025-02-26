@@ -23,10 +23,9 @@ public class LoginFormController {
         basicTextEncryptor.setPassword(key);
 
         try {
-            Login login = LoginController.check(txtuserName.getText(), txtPassweord.getText());
+            Login login = LoginController.check(txtuserName.getText());
             if (login != null) {
                 if (basicTextEncryptor.decrypt(login.getPassword()).equals(txtPassweord.getText())) {
-                    new Alert(Alert.AlertType.CONFIRMATION, "Login Success").show();
                     Stage stage = new Stage();
                     stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/View/Main_Form.fxml"))));
                     stage.show();

@@ -41,7 +41,7 @@ Thogakade Management System is a comprehensive application designed to manage re
 - **Database Scripts:** Located in the `db_scripts` folder for setting up the database schema.
 
 ## Screenshots
-<div align="center">
+<div align ="center">
    
 ![Capture](https://github.com/user-attachments/assets/8144fdc6-3603-45c1-a81f-892606d9bbef)
 
@@ -50,5 +50,52 @@ Thogakade Management System is a comprehensive application designed to manage re
 ![3Capture](https://github.com/user-attachments/assets/353033e8-bd1a-456e-b706-b65727fca2ff)
 
 ![2Capture](https://github.com/user-attachments/assets/2310a5a9-2868-4e98-b4a6-87fdd4a0e0fc)
-
 </div>
+
+## Database Quary
+
+CREATE DATABASE Thogakade;
+
+USE Thogakade;
+
+CREATE TABLE Customer(
+CustID VARCHAR(6) NOT NULL,
+Name VARCHAR(30) NOT NULL,
+Address VARCHAR(30),
+Salary DECIMAL(10,2),
+CONSTRAINT PRIMARY KEY (CustID)
+);
+
+CREATE TABLE Item(
+ItemCode VARCHAR(6) NOT NULL,
+Description VARCHAR(50),
+UnitPrice DECIMAL(6,2),
+QtyOnHand INT(5),
+CONSTRAINT PRIMARY KEY (ItemCode)
+);
+
+CREATE TABLE Orders(
+OrderID VARCHAR(6) NOT NULL,
+OrderDate DATE,
+CustID VARCHAR(6) NOT NULL,
+CONSTRAINT PRIMARY KEY (OrderID),
+CONSTRAINT FOREIGN KEY(CustID) REFERENCES Customer(CustID)
+);
+
+CREATE TABLE OrderDetail(
+ItemCode VARCHAR(6) NOT NULL,
+OrderQTY INT(11) NOT NULL,
+OrderID VARCHAR(6) NOT NULL,
+UnitPrice decimal(10,2),
+CONSTRAINT PRIMARY KEY (OrderID,ItemCode),
+CONSTRAINT FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+CONSTRAINT FOREIGN KEY (ItemCode) REFERENCES Item(ItemCode)
+);
+
+
+CREATE TABLE users(
+Id int auto_increment not null primary key,
+UserName VARCHAR(100) NOT NULL,
+Email VARCHAR(100) NOT NULL,
+Password varchar(200) NOT NULL
+);

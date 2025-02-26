@@ -3,8 +3,12 @@ package Controller.Item;
 import DBConnection.DBConnection;
 import Model.Item;
 import Model.OrderDetail;
+import Service.Custom.ItemService;
+import Service.ServiceFactory;
+import Util.ServiceType;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -57,6 +61,7 @@ public class ItemFormControlller implements Initializable {
 
     @FXML
     private JFXButton update;
+    ItemService service = ServiceFactory.getInstance().getServiceType(ServiceType.ITEM);
 
     @FXML
     void addAction(ActionEvent event) throws RuntimeException {
@@ -68,7 +73,7 @@ public class ItemFormControlller implements Initializable {
         );
 
         try {
-            if (ItemController.getInstance().addItem(item)) {
+            if (service.save(item)) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Item added").show();
                 loadtable();
             }
@@ -85,7 +90,7 @@ public class ItemFormControlller implements Initializable {
     void delateaction(ActionEvent event) {
         try {
 
-            if (ItemController.getInstance().deleteItem(txtcode.getText())) {
+            if (service.delete(txtcode.getText())) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Item Deleted").show();
                 loadtable();
             }
@@ -102,7 +107,7 @@ public class ItemFormControlller implements Initializable {
     void searchAction(ActionEvent event) {
 
         try {
-            Item item = ItemController.getInstance().searchItem(txtcode.getText());
+            Item item = service.search(txtcode.getText());
             if (item != null) {
                 txtDes.setText(item.getDescription());
                 txtPrice.setText(item.getUnitPrice() + "");
@@ -117,7 +122,7 @@ public class ItemFormControlller implements Initializable {
     void txtCode(ActionEvent event) {
 
         try {
-            Item item = ItemController.getInstance().searchItem(txtcode.getText());
+            Item item = service.search(txtcode.getText());
             if (item != null) {
                 txtDes.setText(item.getDescription());
                 txtPrice.setText(item.getUnitPrice() + "");
@@ -138,7 +143,7 @@ public class ItemFormControlller implements Initializable {
         );
 
         try {
-            if (ItemController.getInstance().updateItem(item)) {
+            if (service.update(item)) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Item Updated").show();
                 loadtable();
             }
@@ -156,21 +161,18 @@ public class ItemFormControlller implements Initializable {
     private void loadtable() {
 
         try {
-            ObservableList<Item> ItemOBList = (ObservableList<Item>) ItemController.getInstance().getAllItem();
-
-            ItemList.forEach(item -> {
-                ItemOBList.add(item);
-            });
+            List<Item> itemList = service.getAll();
+            ObservableList<Item> ItemOBList = FXCollections.observableArrayList(itemList);
 
             tlbItem.setItems(ItemOBList);
+
+            tlbCode.setCellValueFactory(new PropertyValueFactory<>("code"));
+            tlbDes.setCellValueFactory(new PropertyValueFactory<>("description"));
+            tlbPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+            tlbQty.setCellValueFactory(new PropertyValueFactory<>("qtyOnHand"));
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-        tlbCode.setCellValueFactory(new PropertyValueFactory<>("code"));
-        tlbDes.setCellValueFactory(new PropertyValueFactory<>("description"));
-        tlbPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-        tlbQty.setCellValueFactory(new PropertyValueFactory<>("qtyOnHand"));
     }
 
     @Override
@@ -201,7 +203,8 @@ public class ItemFormControlller implements Initializable {
     }
 
     public boolean updateStock(OrderDetail orderDetails) {
-        String sql = "UPDATE item SET qtyOnHand = qtyOnHand - ? WHERE code=?";
+        String sql = "UPDATE item SET QtyOnHand = QtyOnHand - ? WHERE ItemCode=?";
+
         try {
             PreparedStatement stm = DBConnection.getInstance().getConnection().prepareStatement(sql);
             stm.setObject(1, orderDetails.getQty());

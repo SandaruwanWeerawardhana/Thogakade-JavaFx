@@ -7,6 +7,7 @@ import Service.ServiceFactory;
 import Util.ServiceType;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,7 +18,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -58,18 +62,18 @@ public class CustomerFormController implements Initializable {
     private JFXButton update;
 
 
+    CustomerService customerService = ServiceFactory.getInstance().getServiceType(ServiceType.CUSTOMER);
 
     @FXML
     void addAction(ActionEvent event) {
-        CustomerService CustomerService = ServiceFactory.getInstance().getServiceType(ServiceType.CUSTOMER);
-
+        try {
             Customer customer = new Customer(
                     txtID.getText(),
                     txtName.getText(),
                     txtAddress.getText(),
                     Double.parseDouble(txtSalary.getText())
             );
-            boolean isAdded = CustomerService.saveCustomer(customer);
+            boolean isAdded = customerService.saveCustomer(customer);
 
             if (isAdded) {
                 new Alert(Alert.AlertType.CONFIRMATION, "customer added").show();
@@ -86,13 +90,18 @@ public class CustomerFormController implements Initializable {
             txtName.clear();
             txtAddress.clear();
             txtSalary.clear();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     @FXML
     void delateaction(ActionEvent event) {
 
         try {
-            boolean isDelete = CustomerController.getInstance().deleteCustomer(txtID.getText());
+            boolean isDelete = customerService.deleteCustomer(txtID.getText());
 
             if (isDelete) {
                 new Alert(Alert.AlertType.CONFIRMATION, "customer Deleted").show();
@@ -112,13 +121,12 @@ public class CustomerFormController implements Initializable {
     @FXML
     void searchAction(ActionEvent event) {
         try {
-            Customer customer = CustomerController.getInstance().searchCustomer(txtID.getText());
+            Customer customer = customerService.searchCustomer(txtID.getText());
             if (customer != null) {
                 txtName.setText(customer.getName());
                 txtAddress.setText(customer.getAddress());
                 txtSalary.setText(customer.getSalary() + "");
             }
-
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -153,6 +161,7 @@ public class CustomerFormController implements Initializable {
     @FXML
     void updateaction(ActionEvent event) {
         try {
+
             Customer customer = new Customer(
                     txtID.getText(),
                     txtName.getText(),
@@ -161,13 +170,12 @@ public class CustomerFormController implements Initializable {
 
             );
 
-            boolean isUpdate = CustomerController.getInstance().updateCustomer(customer);
+            boolean isUpdate = customerService.updateCustomer(customer);
 
             if (isUpdate) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Customer Updated").show();
                 loadtable();
             }
-
             txtID.clear();
             txtName.clear();
             txtAddress.clear();
@@ -183,19 +191,15 @@ public class CustomerFormController implements Initializable {
 
     private void loadtable() {
         try {
-            ObservableList<Customer> CusObList = (ObservableList<Customer>) CustomerController.getInstance().getAll();
-            cusList.forEach(customer -> {
-                CusObList.add(customer);
-            });
+            List<Customer> customerList = customerService.getAll();
+            ObservableList<Customer> CusObList = FXCollections.observableArrayList(customerList);
 
             tlbCustomer.setItems(CusObList);
-
 //set Model name
             tID.setCellValueFactory(new PropertyValueFactory<>("id"));
             tName.setCellValueFactory(new PropertyValueFactory<>("name"));
             address.setCellValueFactory(new PropertyValueFactory<>("address"));
             Salary.setCellValueFactory(new PropertyValueFactory<>("salary"));
-
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
